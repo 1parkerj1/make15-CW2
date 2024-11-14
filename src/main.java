@@ -16,6 +16,7 @@ public class main {
                 System.out.println(card);
             } else {
                 System.out.println("The deck is empty");
+                System.out.println(deck);
             }
         }
 
