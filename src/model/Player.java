@@ -10,7 +10,6 @@ public class Player {
     private String name;
 
 
-
     // constructor to initialise the player with cards
     public Player(String name) {
         this.hand = new ArrayList<>();
