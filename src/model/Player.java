@@ -36,9 +36,13 @@ public class Player {
         return gamesWon;
     }
 
-    // score getter
+    // score getters/setters
     public int getScore() {
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     // hand getters/setters
@@ -52,44 +56,17 @@ public class Player {
         }
     }
 
+    public String showHand() {
+        StringBuilder handString = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            handString.append(i + 1).append(") ").append(hand.get(i).toString()).append("\n");
+        }
+        return handString.toString();
+    }
+
     public List<Card> getHand() {
         return hand;
     }
-
-    // shows the player's hand
-    public String showHand() {
-        String possessive;
-
-        if (this.name.endsWith("s")) {
-            return possessive = this.name + "'" + hand;
-        } else {
-            return possessive = this.name + "'s" + hand;
-        }
-    }
-
-
-
-//    // play a card that makes 15
-//    public Card playCard(Card computerCard, Deck deck) {
-//        for (Card card : hand) {
-//            if (card.getRankVal() + computerCard.getRankVal() == 15) {
-//                score++;
-//                hand.remove(card);
-//                addCard(deck.deal());
-//                return card;
-//            }
-//        }
-//
-//        for (Card card : hand) {
-//            if (card.getSuit().equals(computerCard.getSuit())) {
-//                hand.remove(card);
-//                addCard(deck.deal());
-//                return card;
-//            }
-//        }
-//
-//        return hand.isEmpty() ? null : hand.remove(0);
-//    }
 
     // add new card to player's hand
     public void addCard(Card newCard) {
