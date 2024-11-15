@@ -1,6 +1,6 @@
 import model.Card;
 import model.Deck;
-
+import game.Game;
 public class Main {
     public static void main(String[] args) {
         Deck deck = new Deck();
@@ -16,6 +16,7 @@ public class Main {
                 System.out.println(deck);
             }
         }
+
 
     }
 }

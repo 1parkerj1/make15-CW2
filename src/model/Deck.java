@@ -11,7 +11,7 @@ public class Deck {
 
     private List<Card> cards;
 
-    // constructor for creating a new deck
+    // constructor for creating a shuffled deck
     public Deck() {
         createDeck();
         shuffle();
@@ -33,7 +33,7 @@ public class Deck {
 
     public Card deal() {
         if (!cards.isEmpty()) {
-            return cards.remove(0);
+            return cards.removeFirst();
         }
         return null;
     }
@@ -49,5 +49,8 @@ public class Deck {
         shuffle();
     }
 
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
 
 }
