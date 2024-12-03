@@ -56,16 +56,21 @@ public class Player {
         }
     }
 
-    public String showHand() {
-        StringBuilder handString = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            handString.append(i + 1).append(") ").append(hand.get(i).toString()).append("\n");
-        }
-        return handString.toString();
-    }
-
     public List<Card> getHand() {
         return hand;
+    }
+
+    public void showHand(Deck deck){
+        StringBuilder handString = new StringBuilder();
+        for (int i = 0; i < hand.size(); i++) {
+            System.out.println((i + 1) + ") " + hand.get(i));
+            handString.append(hand.get(i));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     // add new card to player's hand

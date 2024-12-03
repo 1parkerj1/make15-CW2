@@ -25,12 +25,12 @@ public class Main {
 
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("WELCOME TO MAKE 15 :)\n━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("WELCOME TO MAKE 15 :)");
 
         // add validation to name
-        System.out.print("Enter Your Name: ");
+        System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━\nEnter Your Name: ");
         String name = scan.nextLine();
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         Game game = new Game(name);
         game.startGame();
