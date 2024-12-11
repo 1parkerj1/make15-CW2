@@ -6,16 +6,14 @@ import java.util.List;
 public class Player {
 
     private List<Card> hand;
-    private int score, gamesWon;
+    private int score;
     private String name;
 
 
     // constructor to initialise the player with cards
-    public Player(String name) {
+    public Player() {
         this.hand = new ArrayList<>();
         this.score = 0;
-        this.gamesWon = 0;
-        this.name = name;
     }
 
     // name getters/setters
@@ -27,15 +25,6 @@ public class Player {
         return name;
     }
 
-    // games won getters/setters
-    public void setGamesWon(int gamesWon) {
-        this.gamesWon = gamesWon;
-    }
-
-    public int getGamesWon() {
-        return gamesWon;
-    }
-
     // score getters/setters
     public int getScore() {
         return score;
@@ -45,7 +34,12 @@ public class Player {
         this.score = score;
     }
 
+
     // hand getters/setters
+    public List<Card> getHand() {
+        return hand;
+    }
+
     public void setHand(Deck deck) {
         hand.clear();
         for (int i = 0; i < 5; i++) {
@@ -56,10 +50,14 @@ public class Player {
         }
     }
 
-    public List<Card> getHand() {
-        return hand;
+    // add new card to player's hand
+    public void addCard(Card newCard) {
+        if (hand.size() < 5 && newCard != null) {
+            hand.add(newCard);
+        }
     }
 
+    // show players hand with nice animation (kinda)
     public void showHand(Deck deck){
         StringBuilder handString = new StringBuilder();
         for (int i = 0; i < hand.size(); i++) {
@@ -73,24 +71,13 @@ public class Player {
         }
     }
 
-    // add new card to player's hand
-    public void addCard(Card newCard) {
-        if (hand.size() < 5) {
-            hand.add(newCard);
-        }
-    }
-
     public boolean hasMoves(Card computerCard) {
-        boolean make15 = true;
-
         for (Card card : hand) {
-            if (card.getRankVal() + computerCard.getRankVal() != 15) {
-                make15 = false;
+            if (card.getRankVal() + computerCard.getRankVal() == 15 || card.getSuit().equals(computerCard.getSuit())) {
+                return true;
             }
         }
-
-        return make15 || hand.stream().anyMatch(card -> card.getSuit().equals(computerCard.getSuit()));
+        return false;
     }
-
 
 }

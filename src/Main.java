@@ -25,14 +25,26 @@ public class Main {
 
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("WELCOME TO MAKE 15 :)");
+        System.out.println("                                                             __            .----------. ");
+        System.out.println("                                                        ...-'  |`.        /          /  ");
+        System.out.println(" __  __   ___                 .           __.....__     |      |  |      /   ______.'   ");
+        System.out.println("|  |/  `.'   `.             .'|       .-''         '.   ....   |  |     /   /_          ");
+        System.out.println("|   .-.  .-.   '          .'  |      /     .-''\"'-.  `.   -|   |  |    /      '''--.    ");
+        System.out.println("|  |  |  |  |  |    __   <    |     /     /________\\   \\   |   |  |   '___          `.  ");
+        System.out.println("|  |  |  |  |  | .:--.'.  |   | ____|                  |...'   `--'       `'.         | ");
+        System.out.println("|  |  |  |  |  |/ |   \\ | |   | \\ .\\    .-------------'|         |`.        )        | ");
+        System.out.println("|  |  |  |  |  |`\" __ | | |   |/  .  \\    '-.____...---.` --------\\ |......-'        /  ");
+        System.out.println("|__|  |__|  |__| .'.''| | |    /\\  \\  `.             .'  `---------' \\          _..'`   ");
+        System.out.println("                / /   | |_|   |  \\  \\   `''-...... -'                 '------'''        ");
+        System.out.println("                \\ \\._,\\ '/'    \\  \\  \\                                                   ");
+        System.out.println("                 `--'  `\"'------'  '---'                                                 ");
 
-        // add validation to name
-        System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━\nEnter Your Name: ");
-        String name = scan.nextLine();
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nPress Enter to Start :)\n");
+        scan.nextLine();
 
-        Game game = new Game(name);
+        Game game = new Game();
         game.startGame();
+
+        scan.close();
     }
 }

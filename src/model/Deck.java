@@ -9,48 +9,45 @@ public class Deck {
     private static final String[] RANKS = {"Clubs", "Diamonds", "Hearts", "Spades"};
     private static final String[] SUITS = {"2","3","4","5","6", "7","8","9","10", "Jack","Queen","King","Ace"};
 
-    private List<Card> cards;
+    private List<Card> deckCards;
 
-    // constructor for creating a shuffled deck
+    // constructor for creating and shuffling the deck
     public Deck() {
         createDeck();
-        shuffle();
+        Collections.shuffle(deckCards);
     }
 
     // create a new non-shuffled deck
     public void createDeck() {
-        cards = new ArrayList<>();
+        deckCards = new ArrayList<>();
         for (String suit : RANKS) {
             for (String rank : SUITS) {
-                cards.add(new Card(suit, rank));
+                deckCards.add(new Card(suit, rank));
             }
         }
     }
 
-    public void shuffle() {
-        Collections.shuffle(cards);
-    }
-
+    // removes the card from the top of the deck
     public Card deal() {
-        if (!cards.isEmpty()) {
-            return cards.removeFirst();
+        if (!deckCards.isEmpty()) {
+            return deckCards.removeFirst();
         }
         return null;
     }
 
+    // reset and shuffle the deck
     public void resetDeck() {
-        cards.clear();
-
-        for (String suit : SUITS) {
-            for (String rank : RANKS) {
-                cards.add(new Card(suit, rank));
-            }
-        }
-        shuffle();
+        deckCards.clear();
+        createDeck();
+        Collections.shuffle(deckCards);
     }
 
     public boolean isEmpty() {
-        return cards.isEmpty();
+        return deckCards.isEmpty();
+    }
+
+    public int getRemainingCards() {
+        return deckCards.size();
     }
 
 }
