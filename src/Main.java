@@ -47,4 +47,10 @@ public class Main {
 
         scan.close();
     }
+
+    /*
+    TODO: deck amount selector, 1-3 decks for longer games
+    TODO: leaderboard
+    TODO: replay
+     */
 }
