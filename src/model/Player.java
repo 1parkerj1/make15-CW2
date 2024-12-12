@@ -51,9 +51,9 @@ public class Player {
     }
 
     // add new card to player's hand
-    public void addCard(Card newCard) {
+    public void addCard(Card newCard, int selectedPos) {
         if (hand.size() < 5 && newCard != null) {
-            hand.add(newCard);
+            hand.add(selectedPos, newCard);
         }
     }
 

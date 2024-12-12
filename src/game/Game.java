@@ -12,7 +12,7 @@ public class Game {
 
     private Player player;
     private Deck deck;
-    private int score, roundCount;
+    private int score, roundCount, selectedCardPos;
     private Card computerCard;
     private Queue<String> replayQueue;
     private String end;
@@ -31,7 +31,7 @@ public class Game {
 
         while (!deck.isEmpty()) {
             if (!playRound(scan)) {
-                end = "Player could not make a valid move!";
+                end = "\nPlayer could not make a valid move!";
                 break;
             }
         }
@@ -53,14 +53,14 @@ public class Game {
         System.out.println("Your hand: ");
         player.showHand(deck);
 
-        Card playerCard = getPlayerChoice(scan);
-        if (playerCard == null) {
+        Card selectedCard = getPlayerChoice(scan);
+        if (selectedCard == null) {
             end = "Player quit the game!";
             return false;
         }
 
         roundCount++;
-        return cardSelection(playerCard, computerCard);
+        return cardSelection(selectedCard, computerCard);
     }
 
     private boolean cardSelection(Card playerCard, Card computerCard) {
@@ -69,13 +69,13 @@ public class Game {
             score++;
             player.getHand().remove(playerCard);
             computerCard = deck.deal();
-            player.addCard(deck.deal());
+            player.addCard( deck.deal(), selectedCardPos);
             return true;
         } else if (playerCard.getSuit().equals(computerCard.getSuit())) {
             System.out.println("\nPlayed same suit. Card swapped :)");
             computerCard = playerCard;
             player.getHand().remove(playerCard);
-            player.addCard(deck.deal());
+            player.addCard(deck.deal(), selectedCardPos);
             return true;
         }
         end = "No valid moves!";
@@ -90,6 +90,7 @@ public class Game {
         if (choice == 0) {
             return null;
         }
+        selectedCardPos = choice - 1;
         return player.getHand().get(choice - 1);
     }
 
