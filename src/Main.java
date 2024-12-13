@@ -39,7 +39,7 @@ public class Main {
         System.out.println("                \\ \\._,\\ '/'    \\  \\  \\                                                   ");
         System.out.println("                 `--'  `\"'------'  '---'                                                 ");
 
-        System.out.print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nPress Enter to Start :)\n");
+        System.out.print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nPress Enter to Start :)");
         scan.nextLine();
 
         Game game = new Game();
