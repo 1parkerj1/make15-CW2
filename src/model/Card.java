@@ -8,11 +8,13 @@ public class Card {
     private final String rank;
     private final String suit;
 
+    // card constructors
     public Card(String suit, String rank) {
         this.suit = suit;
         this.rank = rank;
     }
 
+    // getters and setters
     public String getSuit() {
         return suit;
     }

@@ -16,7 +16,7 @@ public class Player {
         this.score = 0;
     }
 
-    // name getters/setters
+    // getters/setters
     public void setName(String name) {
         this.name = name;
     }
@@ -25,7 +25,6 @@ public class Player {
         return name;
     }
 
-    // score getters/setters
     public int getScore() {
         return score;
     }
@@ -70,6 +69,7 @@ public class Player {
         }
     }
 
+    // checks if the player has any moves
     public boolean hasMoves(Card computerCard) {
         for (Card card : hand) {
             if (card.getRankVal() + computerCard.getRankVal() == 15 || card.getSuit().equals(computerCard.getSuit())) {
