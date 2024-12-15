@@ -103,7 +103,7 @@ public class Game {
                 }
                 System.out.print("\nInvalid choice, please choose again! ");
             } catch (NumberFormatException e) {
-                System.out.print("\nInvalid input, please enter a number between 0-5! ");
+                System.out.print("\nInvalid input, please enter a number between 1-5! ");
             }
         }
     }
