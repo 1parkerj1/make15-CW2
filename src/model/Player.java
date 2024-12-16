@@ -50,9 +50,18 @@ public class Player {
 
     // add new card to player's hand
     public void addCard(Card newCard, int selectedPos) {
-        if (hand.size() < 5 && newCard != null) {
-            hand.add(selectedPos, newCard);
+        try {
+            if (hand.size() < 5 && newCard != null) {
+                hand.add(selectedPos, newCard);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    // remove card from player's hand
+    public void removeCard(Card playerCard) {
+        this.hand.remove(playerCard);
     }
 
     // show players hand with nice animation (kinda)

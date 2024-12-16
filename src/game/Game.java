@@ -5,22 +5,29 @@ import model.Player;
 import model.Deck;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Game {
+public class Game extends Deck{
 
     private Player player;
     private Deck deck;
-    private int score, roundCount, selectedCardPos;
     private Card computerCard;
+    private String endReason;
+    private int score, roundCount, selectedCardPos;
     private Queue<String> replayQueue;
-    private String end;
+
 
     public Game() {
         deck = new Deck();
+        System.out.println("\nTEST: DECK BEFORE: " + getDeckCards());
+        System.out.println("TEST: DECK # BEFORE: " + getRemainingCards());
         player = new Player();
         player.setHand(deck);
+        computerCard = deck.deal();
+
+        // less important stuff
         roundCount = 0;
         score = 0;
         replayQueue = new LinkedList<>();
@@ -28,34 +35,37 @@ public class Game {
 
     public void startGame() {
         Scanner scan = new Scanner(System.in);
-
         while (!deck.isEmpty()) {
             if (!playRound(scan)) {
-                end = "\nPlayer could not make a valid move!";
+                endReason = "\nPlayer could not make a valid move!";
                 break;
             }
         }
-
         if (deck.isEmpty()) {
-            end = "\nThe deck is empty!";
+            endReason = "\nThe deck is empty!";
         }
-
         endGame(scan);
     }
 
     public boolean playRound(Scanner scan) {
-        computerCard = deck.deal();
         if (computerCard == null) {
-            end = "The deck is empty!";
+            endReason = "The deck is empty!";
             return false;
         }
-        System.out.println("\nComputer's card: " + computerCard + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+//        if (roundCount == 2) {
+//            System.out.println("TEST: deck # after 2 rounds: " + getRemainingCards());
+//            System.out.println("TEST: deck after 2 rounds: " + getDeckCards());
+//        }
+
+        System.out.println("\nComputer's card: " + computerCard);
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("Your hand: ");
         player.showHand(deck);
 
         Card playerCard = getPlayerChoice(scan);
         if (playerCard == null) {
-            end = "\nPlayer quit the game!";
+            endReason = "\nPlayer quit the game!";
             return false;
         }
 
@@ -66,19 +76,19 @@ public class Game {
     private boolean cardSelection(Card playerCard, Card computerCard) {
         if (playerCard.getRankVal() + computerCard.getRankVal() == 15) {
             System.out.println("\nYou made 15 :)\n+1 point");
+            this.computerCard = deck.deal();
             player.setScore(score++);
-            player.getHand().remove(playerCard);
-            computerCard = deck.deal();
+            player.removeCard(playerCard);
             player.addCard(deck.deal(), selectedCardPos);
             return true;
         } else if (playerCard.getSuit().equals(computerCard.getSuit())) {
             System.out.println("\nPlayed same suit. Card swapped :)");
-            computerCard = playerCard;
-            player.getHand().remove(playerCard);
+            this.computerCard = deck.deal();
+            player.removeCard(playerCard);
             player.addCard(deck.deal(), selectedCardPos);
             return true;
         }
-        end = "No valid moves!";
+        endReason = "No valid moves!";
         return false;
     }
 
@@ -110,7 +120,7 @@ public class Game {
 
     private void endGame(Scanner scan) {
         roundCount = 0;
-        System.out.println(end);
+        System.out.println(endReason);
         System.out.println("━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━\n");
         System.out.println("Final score: " + player.getScore());
 
@@ -120,5 +130,10 @@ public class Game {
 //        }
 
     }
+
+    public List<Card> getDeckCards() {
+        return deck.getDeckCards();
+    }
+
 }
 

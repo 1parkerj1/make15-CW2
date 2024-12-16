@@ -50,4 +50,7 @@ public class Deck {
         return deckCards.size();
     }
 
+    public List<Card> getDeckCards() {
+        return deckCards;
+    }
 }
