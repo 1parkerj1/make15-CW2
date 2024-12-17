@@ -9,28 +9,41 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Game extends Deck{
+public class Game {
 
-    private Player player;
-    private Deck deck;
+    private final Player player;
+    private final Deck deck;
     private Card computerCard;
+
     private String endReason;
-    private int score, roundCount, selectedCardPos;
+    private String playerName;
+    private int score, roundCount, selectedCardPos, deckNum;
     private Queue<String> replayQueue;
 
 
-    public Game() {
-        deck = new Deck();
-        System.out.println("\nTEST: DECK BEFORE: " + getDeckCards());
-        System.out.println("TEST: DECK # BEFORE: " + getRemainingCards());
-        player = new Player();
-        player.setHand(deck);
-        computerCard = deck.deal();
+    public Game(int deckNum) {
+        if (deckNum <= 0) {
+            throw new IllegalArgumentException("Number of decks must be greater than 0");
+        }
+        this.deck = new Deck(deckNum);
+        this.player = new Player();
+        this.roundCount = 0;
 
         // less important stuff
-        roundCount = 0;
         score = 0;
         replayQueue = new LinkedList<>();
+
+        initialiseGame();
+    }
+
+    private void initialiseGame() {
+        // cards in game after decks init
+        System.out.println("TEST: " + getRemainingCards());
+        player.setHand(deck);
+        computerCard = deck.deal();
+        if(computerCard == null) {
+            throw new IllegalStateException("Deck is empty");
+        }
     }
 
     public void startGame() {
@@ -61,7 +74,7 @@ public class Game extends Deck{
         System.out.println("\nComputer's card: " + computerCard);
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("Your hand: ");
-        player.showHand(deck);
+        player.showHand();
 
         Card playerCard = getPlayerChoice(scan);
         if (playerCard == null) {
@@ -70,6 +83,7 @@ public class Game extends Deck{
         }
 
         roundCount++;
+        System.out.println("TEST: end of round #" + roundCount + "; cards left: " + getRemainingCards());
         return cardSelection(playerCard, computerCard);
     }
 
@@ -104,6 +118,7 @@ public class Game extends Deck{
         return player.getHand().get(choice - 1);
     }
 
+    // validate player input
     private int validateInput(Scanner scan, int numOptions) {
         while (true) {
             try {
@@ -118,10 +133,11 @@ public class Game extends Deck{
         }
     }
 
+    // ends the game showing the final score
     private void endGame(Scanner scan) {
         roundCount = 0;
+        System.out.println("\n━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━");
         System.out.println(endReason);
-        System.out.println("━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━\n");
         System.out.println("Final score: " + player.getScore());
 
 //        System.out.println("━━━━━━━━━━━━━━━━━━━\nWould you like to see the replay? (y/n)");
@@ -131,8 +147,13 @@ public class Game extends Deck{
 
     }
 
+    // test method for showing how many cards are currently in the deck
     public List<Card> getDeckCards() {
         return deck.getDeckCards();
+    }
+
+    public int getRemainingCards() {
+        return getDeckCards().size();
     }
 
 }
