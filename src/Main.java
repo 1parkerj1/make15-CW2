@@ -1,13 +1,13 @@
-import model.Card;
-import model.Deck;
 import game.Game;
+import model.Player;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
     private static final Scanner scan = new Scanner(System.in);
-
+    private static final String LEADERBOARD = "leaderboard.txt";
 
     public static void main(String[] args) {
         printBanner();
@@ -23,12 +23,10 @@ public class Main {
                 }
                 case "2": {
                     printRules();
-                    scan.close();
                     break;
                 }
                 case "3": {
                     printLeaderboard();
-                    scan.close();
                     break;
                 }
                 case "4": {
@@ -47,6 +45,15 @@ public class Main {
         int deckNum = getDeckNum();
         Game game = new Game(deckNum);
         game.startGame();
+
+        // need to make it so that when the game is finished it checks
+        // the top 5 scores in the leaderboard that are there
+//        Player player = new Player();
+//        player.setName(promptForName(game));
+//        String playerName = player.getName();
+//        if (playerName != null) {
+//            updateLeaderboard(playerName, game.getScore());
+//        }
     }
 
     private static int getDeckNum() {
@@ -62,8 +69,6 @@ public class Main {
             }
         }
     }
-
-
 
 
     // display format methods :)
@@ -93,8 +98,7 @@ public class Main {
     public static void printRules() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("How to Play:");
-        System.out.println("\nMake 15 is a one-player card game played against the computer.");
-        System.out.println("\nRules:");
+        System.out.println("\nRules: Make 15 is a one-player card game played against the computer.");
         System.out.println("1. The game uses one (or many) standard shuffled deck(s) of playing cards.");
         System.out.println("2. You are dealt 5 cards at the start of the game.");
         System.out.println("3. In each round, the computer deals a card face-up from the deck.");
@@ -113,24 +117,51 @@ public class Main {
         System.out.print("Press enter to go back to main menu: ");
         scan.nextLine();
     }
+
     // temp
     public static void printLeaderboard() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-        System.out.println("Leaderboard:");
+        System.out.println("Leaderboard:\n");
         System.out.format("+---------+----------+%n");
         System.out.format("| Name    | Score    |%n");
         System.out.format("+---------+----------+%n");
-        String leftAlignment = "| %-7s | %-8s |%n";
-        // for the name and score I need to read it from the file
-        // in the player class ill have a way to write to the file
-        System.out.format(leftAlignment, "name", "score");
-        System.out.format("+---------+----------+%n");
-        System.out.print("Press enter to go back to main menu: ");
+        try (BufferedReader reader = new BufferedReader(new FileReader(LEADERBOARD))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    System.out.format("| %-7s | %-8s |%n", parts[0], parts[1]);
+                }
+                System.out.format("+---------+----------+%n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading leaderboard: " + e.getMessage());
+        }
+        System.out.print("\nPress enter to go back to main menu: ");
         scan.nextLine();
+    }
+
+    private static void updateLeaderboard(String name, int score) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LEADERBOARD, true))) {
+            writer.write(name + "," + score);
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error updating leaderboard: " + e.getMessage());
+        }
+    }
+
+    private static String promptForName(Game game) {
+        if (game.getScore() > 0) {
+            System.out.print("\nNew High Score! Enter your name: ");
+            return scan.nextLine().trim();
+        }
+        return null;
     }
 
     /*
     TODO: leaderboard
+     - make sure the user only needs to enter their name if they get a high score (top 5 scores)
+     - :/ lots of file reading sigh
     TODO: replay
      */
 }

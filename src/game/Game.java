@@ -156,5 +156,9 @@ public class Game {
         return getDeckCards().size();
     }
 
+    public int getScore() {
+        return this.player.getScore();
+    }
+
 }
 
