@@ -1,13 +1,14 @@
 import game.Game;
+import model.Leaderboard;
 import model.Player;
 
 import java.io.*;
 import java.util.Scanner;
 
-public class Main {
+public class Make15 {
 
     private static final Scanner scan = new Scanner(System.in);
-    private static final String LEADERBOARD = "leaderboard.txt";
+    private static final Leaderboard leaderboard = new Leaderboard();
 
     public static void main(String[] args) {
         printBanner();
@@ -26,7 +27,9 @@ public class Main {
                     break;
                 }
                 case "3": {
-                    printLeaderboard();
+                    leaderboard.display();
+                    System.out.print("\nPress enter to go back to main menu: ");
+                    scan.nextLine();
                     break;
                 }
                 case "4": {
@@ -46,14 +49,17 @@ public class Main {
         Game game = new Game(deckNum);
         game.startGame();
 
-        // need to make it so that when the game is finished it checks
-        // the top 5 scores in the leaderboard that are there
-//        Player player = new Player();
-//        player.setName(promptForName(game));
-//        String playerName = player.getName();
-//        if (playerName != null) {
-//            updateLeaderboard(playerName, game.getScore());
-//        }
+        int finalScore = game.getScore();
+        System.out.print("| Final score: " + finalScore);
+
+        if (leaderboard.isHighScore(finalScore)) {
+            System.out.println("Congratulations! You made the leaderboard! (somehow...) ");
+            System.out.print("\nEnter your name: ");
+            // needs validation ->
+            leaderboard.addEntry(scan.nextLine().trim(), finalScore);
+        } else {
+            System.out.println("Good effort! however you did not make the leaderboard... ");
+        }
     }
 
     private static int getDeckNum() {
@@ -65,7 +71,7 @@ public class Main {
                 }
                 System.out.println("Invalid input, please enter a number between 1-3! ");
             } catch (NumberFormatException e) {
-                System.out.print("Invalid input, Please enter a valid number: ");
+                System.out.print("\nInvalid input, Please enter a valid number: ");
             }
         }
     }
@@ -118,50 +124,7 @@ public class Main {
         scan.nextLine();
     }
 
-    // temp
-    public static void printLeaderboard() {
-        System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-        System.out.println("Leaderboard:\n");
-        System.out.format("+---------+----------+%n");
-        System.out.format("| Name    | Score    |%n");
-        System.out.format("+---------+----------+%n");
-        try (BufferedReader reader = new BufferedReader(new FileReader(LEADERBOARD))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    System.out.format("| %-7s | %-8s |%n", parts[0], parts[1]);
-                }
-                System.out.format("+---------+----------+%n");
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading leaderboard: " + e.getMessage());
-        }
-        System.out.print("\nPress enter to go back to main menu: ");
-        scan.nextLine();
-    }
-
-    private static void updateLeaderboard(String name, int score) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LEADERBOARD, true))) {
-            writer.write(name + "," + score);
-            writer.newLine();
-        } catch (IOException e) {
-            System.out.println("Error updating leaderboard: " + e.getMessage());
-        }
-    }
-
-    private static String promptForName(Game game) {
-        if (game.getScore() > 0) {
-            System.out.print("\nNew High Score! Enter your name: ");
-            return scan.nextLine().trim();
-        }
-        return null;
-    }
-
     /*
-    TODO: leaderboard
-     - make sure the user only needs to enter their name if they get a high score (top 5 scores)
-     - :/ lots of file reading sigh
     TODO: replay
-     */
+    */
 }

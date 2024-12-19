@@ -20,6 +20,8 @@ public class Game {
     private int score, roundCount, selectedCardPos, deckNum;
     private Queue<String> replayQueue;
 
+    public static final String TEST = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
 
     public Game(int deckNum) {
         if (deckNum <= 0) {
@@ -38,7 +40,7 @@ public class Game {
 
     private void initialiseGame() {
         // cards in game after decks init
-        System.out.println("TEST: " + getRemainingCards());
+        System.out.println(TEST + "TEST: " + getRemainingCards() + RESET);
         player.setHand(deck);
         computerCard = deck.deal();
         if(computerCard == null) {
@@ -83,7 +85,7 @@ public class Game {
         }
 
         roundCount++;
-        System.out.println("TEST: end of round #" + roundCount + "; cards left: " + getRemainingCards());
+        System.out.println(TEST + "TEST: end of round #" + roundCount + "| cards left: " + getRemainingCards() + RESET);
         return cardSelection(playerCard, computerCard);
     }
 
@@ -91,7 +93,8 @@ public class Game {
         if (playerCard.getRankVal() + computerCard.getRankVal() == 15) {
             System.out.println("\nYou made 15 :)\n+1 point");
             this.computerCard = deck.deal();
-            player.setScore(score++);
+            score++;
+            player.setScore(score);
             player.removeCard(playerCard);
             player.addCard(deck.deal(), selectedCardPos);
             return true;
@@ -137,8 +140,7 @@ public class Game {
     private void endGame(Scanner scan) {
         roundCount = 0;
         System.out.println("\n━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━");
-        System.out.println(endReason);
-        System.out.println("Final score: " + player.getScore());
+        System.out.print(endReason);
 
 //        System.out.println("━━━━━━━━━━━━━━━━━━━\nWould you like to see the replay? (y/n)");
 //        if (scan.nextLine().equalsIgnoreCase("Y")) {
