@@ -85,7 +85,7 @@ public class Game {
         }
 
         roundCount++;
-        System.out.println(TEST + "TEST: end of round #" + roundCount + "| cards left: " + getRemainingCards() + RESET);
+        System.out.println(TEST + "TEST: end of round #" + roundCount + " | cards left: " + getRemainingCards() + RESET);
         return cardSelection(playerCard, computerCard);
     }
 

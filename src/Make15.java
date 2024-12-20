@@ -15,7 +15,7 @@ public class Make15 {
 
         while (true) {
             printMainMenu();
-            String choice = scan.nextLine();
+            String choice = scan.nextLine().trim();
 
             switch (choice) {
                 case "1": {
@@ -28,7 +28,6 @@ public class Make15 {
                 }
                 case "3": {
                     leaderboard.display();
-                    System.out.print("\nPress enter to go back to main menu: ");
                     scan.nextLine();
                     break;
                 }
@@ -44,28 +43,33 @@ public class Make15 {
     }
 
     private static void mainStartGame() {
-        System.out.print("\nSelect the number of decks you'd like to play with (1-3): ");
         int deckNum = getDeckNum();
+
         Game game = new Game(deckNum);
         game.startGame();
 
         int finalScore = game.getScore();
-        System.out.print("| Final score: " + finalScore);
+        System.out.print(" | Final score: " + finalScore);
 
         if (leaderboard.isHighScore(finalScore)) {
-            System.out.println("Congratulations! You made the leaderboard! (somehow...) ");
+            System.out.println("\nCongratulations! You made the leaderboard! (somehow...) ");
             System.out.print("\nEnter your name: ");
             // needs validation ->
             leaderboard.addEntry(scan.nextLine().trim(), finalScore);
         } else {
-            System.out.println("Good effort! however you did not make the leaderboard... ");
+            System.out.println("\nGood effort! however you did not make the leaderboard... ");
         }
     }
 
     private static int getDeckNum() {
         while (true) {
+            System.out.print("\nSelect the number of decks you'd like to play with (1-3): ");
+            String input = scan.nextLine().trim();
+            if(input.isEmpty()) {
+                return 1;
+            }
             try {
-                int deckNum = Integer.parseInt(scan.nextLine());
+                int deckNum = Integer.parseInt(input);
                 if (deckNum >= 1 && deckNum <= 3) {
                     return deckNum;
                 }
@@ -104,8 +108,9 @@ public class Make15 {
     public static void printRules() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("How to Play:");
-        System.out.println("\nRules: Make 15 is a one-player card game played against the computer.");
-        System.out.println("1. The game uses one (or many) standard shuffled deck(s) of playing cards.");
+        System.out.println("\nRules: Make 15 is a one-player card game played against the computer.\n");
+        System.out.println("1. The game uses a standard deck or decks of playing cards.");
+        System.out.println("   - You can choose how many decks you would like to play with, the default is 1");
         System.out.println("2. You are dealt 5 cards at the start of the game.");
         System.out.println("3. In each round, the computer deals a card face-up from the deck.");
         System.out.println("4. The goal is to pick a card from your hand to make 15 with the computer's card.");
@@ -119,8 +124,7 @@ public class Make15 {
         System.out.println("   - This card will be replaced with a new one from the deck");
         System.out.println("7. The game ends if:");
         System.out.println("   - You cannot make 15 or play a card of the same suit");
-        System.out.println("   - The deck is empty\n");
-        System.out.print("Press enter to go back to main menu: ");
+        System.out.print("\nPress enter to go back to main menu: ");
         scan.nextLine();
     }
 

@@ -26,7 +26,8 @@ public class Leaderboard {
     }
 
     public boolean isHighScore(int score) {
-        return entries.size() < MAX_ENTRIES || score > entries.get(entries.size() - 1).score;
+        if (score <= 0) return false;
+        return entries.size() < MAX_ENTRIES || score > entries.getLast().score;
     }
 
     // add new entry only if high score
@@ -111,5 +112,6 @@ public class Leaderboard {
             System.out.printf("| %-7s | %-8d |%n", entry.name, entry.score);
             System.out.println("+---------+----------+");
         }
+        System.out.print("\nPress enter to go back to main menu: ");
     }
 }
