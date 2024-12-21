@@ -1,8 +1,6 @@
 import game.Game;
 import model.Leaderboard;
-import model.Player;
 
-import java.io.*;
 import java.util.Scanner;
 
 public class Make15 {
@@ -43,6 +41,13 @@ public class Make15 {
     }
 
     private static void mainStartGame() {
+        System.out.println("\nStarting make15...");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         int deckNum = getDeckNum();
 
         Game game = new Game(deckNum);
@@ -53,12 +58,19 @@ public class Make15 {
 
         if (leaderboard.isHighScore(finalScore)) {
             System.out.println("\nCongratulations! You made the leaderboard! (somehow...) ");
-            System.out.print("\nEnter your name: ");
-            // needs validation ->
-            leaderboard.addEntry(scan.nextLine().trim(), finalScore);
+            String playerName = validatePlayerName();
+            leaderboard.addEntry(playerName, finalScore);
         } else {
             System.out.println("\nGood effort! however you did not make the leaderboard... ");
         }
+
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.print("Would you like to see the replay? (y/n) ");
+        if (scan.nextLine().equalsIgnoreCase("Y")) {
+            game.getReplayQueue().viewReplay();
+        }
+        game.getReplayQueue().clear();
+
     }
 
     private static int getDeckNum() {
@@ -76,6 +88,21 @@ public class Make15 {
                 System.out.println("Invalid input, please enter a number between 1-3! ");
             } catch (NumberFormatException e) {
                 System.out.print("\nInvalid input, Please enter a valid number: ");
+            }
+        }
+    }
+
+    private static String validatePlayerName() {
+        while (true) {
+            System.out.print("\nEnter your name: ");
+            String playerName = scan.nextLine().trim();
+
+            if (playerName.isEmpty()) {
+                System.out.print("Name cannot be empty\n");
+            } else if (playerName.length() > 20) {
+                System.out.print("\nName is too long (max 20 characters): ");
+            } else {
+                return playerName;
             }
         }
     }

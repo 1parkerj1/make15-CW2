@@ -108,9 +108,14 @@ public class Leaderboard {
         System.out.println("+---------+----------+");
         System.out.println("| Name    | Score    |");
         System.out.println("+---------+----------+");
-        for (Entry entry : entries) {
-            System.out.printf("| %-7s | %-8d |%n", entry.name, entry.score);
+        if (entries.isEmpty()) {
+            System.out.printf("| %-15s |%n", " No Highscores xD ");
             System.out.println("+---------+----------+");
+        } else {
+            for (Entry entry : entries) {
+                System.out.printf("| %-7s | %-8d |%n", entry.name, entry.score);
+                System.out.println("+---------+----------+");
+            }
         }
         System.out.print("\nPress enter to go back to main menu: ");
     }

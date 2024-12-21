@@ -3,10 +3,9 @@ package game;
 import model.Card;
 import model.Player;
 import model.Deck;
+import model.Replay;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Game {
@@ -14,11 +13,10 @@ public class Game {
     private final Player player;
     private final Deck deck;
     private Card computerCard;
+    private final Replay replayQueue;
 
     private String endReason;
-    private String playerName;
-    private int score, roundCount, selectedCardPos, deckNum;
-    private Queue<String> replayQueue;
+    private int score, roundCount, selectedCardPos;
 
     public static final String TEST = "\u001B[31m";
     public static final String RESET = "\u001B[0m";
@@ -33,12 +31,13 @@ public class Game {
 
         // less important stuff
         score = 0;
-        replayQueue = new LinkedList<>();
+        this.replayQueue = new Replay();
 
         initialiseGame();
     }
 
     private void initialiseGame() {
+        replayQueue.clear();
         // cards in game after decks init
         System.out.println(TEST + "TEST: " + getRemainingCards() + RESET);
         player.setHand(deck);
@@ -52,12 +51,12 @@ public class Game {
         Scanner scan = new Scanner(System.in);
         while (!deck.isEmpty()) {
             if (!playRound(scan)) {
-                endReason = "\nPlayer could not make a valid move!";
+                endReason = "Player could not make a valid move!";
                 break;
             }
         }
         if (deck.isEmpty()) {
-            endReason = "\nThe deck is empty!";
+            endReason = "The deck is empty!";
         }
         endGame(scan);
     }
@@ -68,11 +67,6 @@ public class Game {
             return false;
         }
 
-//        if (roundCount == 2) {
-//            System.out.println("TEST: deck # after 2 rounds: " + getRemainingCards());
-//            System.out.println("TEST: deck after 2 rounds: " + getDeckCards());
-//        }
-
         System.out.println("\nComputer's card: " + computerCard);
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println("Your hand: ");
@@ -80,13 +74,22 @@ public class Game {
 
         Card playerCard = getPlayerChoice(scan);
         if (playerCard == null) {
-            endReason = "\nPlayer quit the game!";
+            endReason = "Player quit the game!";
             return false;
         }
 
         roundCount++;
+        replayQueue.addMessage("Round " + roundCount + ":\n");
+        replayQueue.addMessage("Computer's Card: " + computerCard);
+        replayQueue.addMessage("Player's hand: " + player.getHand());
+        replayQueue.addMessage("Player chose: " + playerCard);
+
+        boolean validMove = cardSelection(playerCard, computerCard);
+        replayQueue.addMessage("\nOutcome: " + (validMove ? " Valid move" : " Invalid move"));
+        replayQueue.addMessage("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
         System.out.println(TEST + "TEST: end of round #" + roundCount + " | cards left: " + getRemainingCards() + RESET);
-        return cardSelection(playerCard, computerCard);
+        return validMove;
     }
 
     private boolean cardSelection(Card playerCard, Card computerCard) {
@@ -139,14 +142,9 @@ public class Game {
     // ends the game showing the final score
     private void endGame(Scanner scan) {
         roundCount = 0;
-        System.out.println("\n━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━");
+        System.out.println("\n━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━\n");
         System.out.print(endReason);
-
-//        System.out.println("━━━━━━━━━━━━━━━━━━━\nWould you like to see the replay? (y/n)");
-//        if (scan.nextLine().equalsIgnoreCase("Y")) {
-//            showReplay();
-//        }
-
+        replayQueue.addMessage(endReason);
     }
 
     // test method for showing how many cards are currently in the deck
@@ -162,5 +160,8 @@ public class Game {
         return this.player.getScore();
     }
 
+    public Replay getReplayQueue() {
+        return replayQueue;
+    }
 }
 
