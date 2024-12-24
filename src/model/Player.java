@@ -8,7 +8,7 @@ public class Player {
 
     private static final int HAND_SIZE = 5;
 
-    private List<Card> hand;
+    private final List<Card> hand;
     private int score;
     private String name;
 

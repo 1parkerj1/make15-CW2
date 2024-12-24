@@ -3,7 +3,7 @@ package model;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Replay {
+public class Replay{
 
     private final Queue<String> gameEvents;
 
@@ -31,5 +31,9 @@ public class Replay {
 
     public void clear() {
         gameEvents.clear();
+    }
+
+    public boolean isEmpty() {
+        return this.gameEvents.isEmpty();
     }
 }
