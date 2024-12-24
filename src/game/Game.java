@@ -4,7 +4,9 @@ import model.Card;
 import model.Player;
 import model.Deck;
 import model.Replay;
+import utils.InputUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,7 +41,7 @@ public class Game {
     private void initialiseGame() {
         replayQueue.clear();
         // cards in game after decks init
-        System.out.println(TEST + "TEST: " + getRemainingCards() + RESET);
+        System.out.println("\n" + TEST + "TEST: " + getRemainingCards() + " cards" + RESET);
         player.setHand(deck);
         computerCard = deck.deal();
         if(computerCard == null) {
@@ -48,7 +50,7 @@ public class Game {
     }
 
     public void startGame() {
-        Scanner scan = new Scanner(System.in);
+        Scanner scan = InputUtils.getSCANNER();
         while (!deck.isEmpty()) {
             if (!playRound(scan)) {
                 endReason = "Player could not make a valid move!";
@@ -85,7 +87,6 @@ public class Game {
         replayQueue.addMessage("Player chose: " + playerCard);
 
         boolean validMove = cardSelection(playerCard, computerCard);
-        replayQueue.addMessage("\nOutcome: " + (validMove ? " Valid move" : " Invalid move"));
         replayQueue.addMessage("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         System.out.println(TEST + "TEST: end of round #" + roundCount + " | cards left: " + getRemainingCards() + RESET);
@@ -93,24 +94,111 @@ public class Game {
     }
 
     private boolean cardSelection(Card playerCard, Card computerCard) {
+        Scanner scan = InputUtils.getSCANNER();
+
         if (playerCard.getRankVal() + computerCard.getRankVal() == 15) {
             System.out.println("\nYou made 15 :)\n+1 point");
+
+            List<Card> handSnapshot = new ArrayList<>(player.getHand());
+
             this.computerCard = deck.deal();
             score++;
             player.setScore(score);
             player.removeCard(playerCard);
             player.addCard(deck.deal(), selectedCardPos);
+            replayQueue.addMessage("Player made 15 and scored 1 point :)");
+
+            System.out.print("\nWould you like to replace any face cards from your hand? (y/n) ");
+            String choice = InputUtils.getYorN();
+
+            if (choice.equals("Y")) {
+                while (true) {
+                    List<Card> pictureCards = new ArrayList<>();
+                    List<Integer> snapshotIndices = new ArrayList<>();
+
+                    for (int i = 0; i < handSnapshot.size(); i++) {
+                        Card card = handSnapshot.get(i);
+                        if (card.getRank().equals("Jack") || card.getRank().equals("Queen") || card.getRank().equals("King")) {
+                            pictureCards.add(card);
+                            snapshotIndices.add(i);
+                        }
+                    }
+
+                    if (pictureCards.isEmpty()) {
+                        System.out.println("You have no picture cards in your hand :/");
+                        replayQueue.addMessage("Player had no picture cards to exchange :/");
+                        break;
+                    }
+
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    System.out.println("Your face cards: ");
+                    for (int i = 0; i < pictureCards.size(); i++) {
+                        System.out.println((i + 1) + ") " + pictureCards.get(i));
+                    }
+                    System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    System.out.println("Enter the number(s) of the card(s) you would like to replace;");
+                    System.out.print("Separate with a comma, or press enter to skip: ");
+
+                    String input = scan.nextLine().trim();
+                    if (input.isEmpty()) {
+                        System.out.println("No picture cards exchanged :)");
+                        replayQueue.addMessage("Player chose not to exchange any picture cards :)");
+                        break;
+                    }
+
+                    String[] indices = input.split(",");
+                    boolean exchanged = false;
+                    System.out.println(" ");
+                    for (String i : indices) {
+                        try {
+                            int selectedIndex = Integer.parseInt(i.trim()) - 1;
+                            if (selectedIndex >= 0 && selectedIndex < pictureCards.size()) {
+                                int realIndex = snapshotIndices.get(selectedIndex);
+                                Card toExchange = handSnapshot.get(realIndex);
+                                player.removeCard(toExchange);
+
+                                Card newCard = deck.deal();
+                                if (newCard != null) {
+                                    player.addCard(newCard, realIndex);
+                                    System.out.println("Exchanged " + toExchange + " for " + newCard);
+                                    replayQueue.addMessage("Player exchanged " + toExchange + " for " + newCard);
+                                    exchanged = true;
+                                } else {
+                                    System.out.println("Deck is empty, no more cards to deal.");
+                                    replayQueue.addMessage("Deck was empty, player could not exchange " + toExchange + ".");
+                                }
+                            } else {
+                                System.out.println("Invalid choice: " + (selectedIndex + 1));
+                            }
+                        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                            System.out.println("Invalid input: " + i.trim());
+                        }
+                    }
+
+                    if (!exchanged) {
+                        System.out.println("No valid exchanges were made.");
+                        replayQueue.addMessage("No valid exchanges were made.");
+                    }
+                    break;
+                }
+            }
             return true;
+
         } else if (playerCard.getSuit().equals(computerCard.getSuit())) {
-            System.out.println("\nPlayed same suit. Card swapped :)");
+            System.out.println("\nPlayed same suit. Cards exchanged :)");
             this.computerCard = deck.deal();
             player.removeCard(playerCard);
-            player.addCard(deck.deal(), selectedCardPos);
+            Card newCard = deck.deal();
+            player.addCard(newCard, selectedCardPos);
+            replayQueue.addMessage("Player played same suit and exchanged " + playerCard + " for " + newCard);
             return true;
         }
+
         endReason = "No valid moves!";
+        replayQueue.addMessage("Player had no valid moves, Game ended.");
         return false;
     }
+
 
     private Card getPlayerChoice(Scanner scan) {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

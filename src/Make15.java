@@ -1,11 +1,12 @@
 import game.Game;
 import model.Leaderboard;
+import utils.InputUtils;
 
 import java.util.Scanner;
 
 public class Make15 {
 
-    private static final Scanner scan = new Scanner(System.in);
+    private static final Scanner scan = InputUtils.getSCANNER();
     private static final Leaderboard leaderboard = new Leaderboard();
 
     public static void main(String[] args) {
@@ -41,14 +42,14 @@ public class Make15 {
     }
 
     private static void mainStartGame() {
-        System.out.println("\nStarting make15...");
+        int deckNum = getDeckNum();
+
+        System.out.print("\nStarting make15...");
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        int deckNum = getDeckNum();
 
         Game game = new Game(deckNum);
         game.startGame();
@@ -66,7 +67,8 @@ public class Make15 {
 
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.print("Would you like to see the replay? (y/n) ");
-        if (scan.nextLine().equalsIgnoreCase("Y")) {
+        String choice = InputUtils.getYorN();
+        if (choice.equalsIgnoreCase("Y")) {
             game.getReplayQueue().viewReplay();
         }
         game.getReplayQueue().clear();
@@ -74,8 +76,8 @@ public class Make15 {
     }
 
     private static int getDeckNum() {
+        System.out.print("\nSelect the number of decks you'd like to play with (1-3): ");
         while (true) {
-            System.out.print("\nSelect the number of decks you'd like to play with (1-3): ");
             String input = scan.nextLine().trim();
             if(input.isEmpty()) {
                 return 1;
@@ -154,8 +156,4 @@ public class Make15 {
         System.out.print("\nPress enter to go back to main menu: ");
         scan.nextLine();
     }
-
-    /*
-    TODO: replay
-    */
 }
