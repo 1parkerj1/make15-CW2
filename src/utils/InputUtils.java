@@ -24,4 +24,5 @@ public class InputUtils {
     public static Scanner getSCANNER() {
         return SCANNER;
     }
+
 }

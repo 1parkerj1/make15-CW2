@@ -18,6 +18,10 @@ public class Leaderboard {
             this.name = name;
             this.score = score;
         }
+
+        public String getName() {
+            return name;
+        }
     }
 
     public Leaderboard() {
