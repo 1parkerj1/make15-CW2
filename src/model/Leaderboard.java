@@ -3,38 +3,73 @@ package model;
 import java.io.*;
 import java.util.*;
 
+/**
+ * leaderboard ADT
+ */
 public class Leaderboard {
 
     private static final int MAX_ENTRIES = 5;
     private final List<Entry> entries;
     private static final String LEADERBOARD = "leaderboard.txt";
 
-    // easier to just do inner class rather than new file
+    /**
+     * Entry helper class, specifies the make of an entry
+     * name, score
+     */
     private static class Entry {
         String name;
         int score;
 
+        /**
+         * constructor for an entry
+         * @param name player name
+         * @param score player score
+         */
         public Entry(String name, int score) {
             this.name = name;
             this.score = score;
         }
 
+        /**
+         * name getter
+         *
+         * @return player name
+         */
         public String getName() {
             return name;
         }
     }
 
+    /**
+     * constructs a leaderboard object and initialised the list of entries
+     */
     public Leaderboard() {
         this.entries = new ArrayList<>();
         readFromFile();
     }
 
+    /**
+     * checks if a given score qualifies as a high score.
+     * high score qualifies if it is greater than 0 and either the leaderboard
+     * has fewer than 5 entries or the score is greater than the lowest
+     * high score on the leaderboard
+     *
+     * @param score the score to check
+     * @return true if the score qualifies as a high score false otherwise
+     */
     public boolean isHighScore(int score) {
         if (score <= 0) return false;
         return entries.size() < MAX_ENTRIES || score > entries.getLast().score;
     }
 
-    // add new entry only if high score
+    /**
+     * adds a new high score entry to the leaderboard if it qualifies
+     * the leaderboard is updated, sorted and truncated to the max number of entries (5)
+     *
+     * @param playerName the name of the player
+     * @param score the score achieved by the player
+     * @return true if the entry was added to the leaderboard false otherwise
+     */
     public boolean addEntry(String playerName, int score) {
         if (score <= 0) {
             return false;
@@ -56,7 +91,11 @@ public class Leaderboard {
         return false;
     }
 
-    // super kewl insertion sort mr gpt helped with this one ngl
+    /**
+     * super cool insertion sort algorithm
+     * sorts the entries in the leaderboard in descending order by score
+     * using the insertion sort algorithm
+     */
     private void insertionSort() {
         for (int i = 1; i < entries.size(); i++) {
             Entry key = entries.get(i);
@@ -70,6 +109,10 @@ public class Leaderboard {
         }
     }
 
+    /**
+     * writes the current leaderboard entries to a file
+     * each entry is stored as a line in the format "name,score"
+     */
     private void writeToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LEADERBOARD))) {
             for (Entry entry : entries) {
@@ -81,6 +124,11 @@ public class Leaderboard {
         }
     }
 
+    /**
+     * reads leaderboard entries from a file and populates the entries list
+     * if the file does not exist, it is created
+     * each line in the file should be in the format "name,score"
+     */
     private void readFromFile() {
         File file = new File(LEADERBOARD);
         if (!file.exists()) {
@@ -106,6 +154,10 @@ public class Leaderboard {
         }
     }
 
+    /**
+     * display the current leaderboard in formatted table
+     * if no scores are present, displays a placeholder message
+     */
     public void display() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("Leaderboard:\n");
@@ -124,6 +176,11 @@ public class Leaderboard {
         System.out.print("\nPress enter to go back to main menu: ");
     }
 
+    /**
+     * returns the list of leaderboard entries
+     *
+     * @return list of leaderboard entries
+     */
     public List<Entry> getEntries() {
         return entries;
     }

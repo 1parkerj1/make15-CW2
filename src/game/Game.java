@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * main game logic for make15
+ * manages the player, deck, game state and replay functionality
+ */
 public class Game {
 
     private final Player player;
@@ -23,6 +27,12 @@ public class Game {
     public static final String TEST = "\u001B[31m";
     public static final String RESET = "\u001B[0m";
 
+    /**
+     * game constructor with specified number of decks
+     *
+     * @param deckNum number of decks to init game with (must be greater than 0)
+     * @throws IllegalArgumentException if deckNum is less than or equal to 0
+     */
     public Game(int deckNum) {
         if (deckNum <= 0) {
             throw new IllegalArgumentException("Number of decks must be greater than 0");
@@ -38,6 +48,9 @@ public class Game {
         initialiseGame();
     }
 
+    /**
+     * init game by dealing cards to the player and setting computer card
+     */
     private void initialiseGame() {
         replayQueue.clear();
         // cards in game after decks init
@@ -49,6 +62,9 @@ public class Game {
         }
     }
 
+    /**
+     * Starts the main game loop, allowing player to play until the game ends
+     */
     public void startGame() {
         Scanner scan = InputUtils.getSCANNER();
         while (!deck.isEmpty()) {
@@ -60,9 +76,16 @@ public class Game {
         if (deck.isEmpty()) {
             endReason = "The deck is empty!";
         }
-        endGame(scan);
+        endGame();
     }
 
+    /**
+     * plays single round of the game, player selects card to play
+     * against the computers card, updates game state and replay queue
+     *
+     * @param scan the scanner used to capture the players input
+     * @return true if the player makes a valid move false otherwise
+     */
     public boolean playRound(Scanner scan) {
         if (computerCard == null) {
             endReason = "The deck is empty!";
@@ -93,6 +116,14 @@ public class Game {
         return validMove;
     }
 
+    /**
+     * processes the logic for a player's card selection during the round
+     * handles scoring, deck updates, face card exchanges
+     *
+     * @param playerCard card chosen by player
+     * @param computerCard current computer card
+     * @return true if the move was valid false otherwise
+     */
     private boolean cardSelection(Card playerCard, Card computerCard) {
         Scanner scan = InputUtils.getSCANNER();
 
@@ -198,7 +229,12 @@ public class Game {
         return false;
     }
 
-
+    /**
+     * prompts the player to select a card from their hand
+     *
+     * @param scan the scanner used to capture input
+     * @return the players card choice from their hand
+     */
     private Card getPlayerChoice(Scanner scan) {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.print("Select a card from your hand (1-5): ");
@@ -211,7 +247,13 @@ public class Game {
         return player.getHand().get(choice - 1);
     }
 
-    // validate player input
+    /**
+     * validates the player's input to ensure it's a valid choice
+     *
+     * @param scan the scanner use to capture input
+     * @param numOptions the amount of valid options the player has
+     * @return the validated choice, between one and numOptions
+     */
     private int validateInput(Scanner scan, int numOptions) {
         while (true) {
             try {
@@ -226,31 +268,61 @@ public class Game {
         }
     }
 
-    // ends the game showing the final score
-    private void endGame(Scanner scan) {
+    /**
+     * displays the final results when the game ends
+     * resets the round count and outputs the reason for the game ending
+     */
+    private void endGame() {
         roundCount = 0;
         System.out.println("\n━━━━━━━━━━━━━\nGAME OVER :/\n━━━━━━━━━━━━━\n");
         System.out.print(endReason);
         replayQueue.addMessage(endReason);
     }
 
-    // test method for showing how many cards are currently in the deck
+    /**
+     * returns a list of cards currently in the deck
+     * formatted - 'rank' of 'suit'
+     *
+     * @return a list of cards in the deck
+     */
     public List<Card> getDeckCards() {
         return deck.getDeckCards();
     }
 
+    /**
+     * returns the number of remaining cards
+     * uses the getRemainingCards() method from the deck class
+     *
+     * @return the number of remaining cards
+     */
     public int getRemainingCards()  {
         return deck.getRemainingCards();
     }
 
+    /**
+     * returns the player's score
+     * uses the getScore() method from the player class
+     *
+     * @return the player's score
+     */
     public int getScore() {
         return player.getScore();
     }
 
+    /**
+     * returns the player's current hand of cards
+     *
+     * @return the player's hand
+     */
     public List<Card> getHand() {
         return this.player.getHand();
     }
 
+    /**
+     * returns the replay queue
+     *
+     * @return the replay queue
+     */
     public Replay getReplayQueue() {
         return replayQueue;
     }

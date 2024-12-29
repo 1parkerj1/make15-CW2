@@ -1,6 +1,7 @@
-package utils;
+package tests;
 
 import org.junit.jupiter.api.Test;
+import utils.InputUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
