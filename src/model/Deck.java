@@ -22,8 +22,7 @@ public class Deck {
     }
 
     // create a new non-shuffled deck
-    private List<Card> createDeck(int deckNum) {
-        List<Card> cards = new ArrayList<>();
+    private void createDeck(int deckNum) {
         for (int i = 0; i < deckNum; i++) {
             for (String suit : RANKS) {
                 for (String rank : SUITS) {
@@ -31,7 +30,6 @@ public class Deck {
                 }
             }
         }
-        return cards;
     }
 
     // shuffle deck
@@ -67,5 +65,9 @@ public class Deck {
 
     public List<Card> getDeckCards() {
         return Collections.unmodifiableList(deckCards);
+    }
+
+    public void clear() {
+        deckCards.clear();
     }
 }

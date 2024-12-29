@@ -8,7 +8,7 @@ public class Player {
 
     private static final int HAND_SIZE = 5;
 
-    private final List<Card> hand;
+    private List<Card> hand;
     private int score;
     private String name;
 
@@ -50,8 +50,15 @@ public class Player {
         return Collections.unmodifiableList(hand);
     }
 
+    public void setHand(List<Card> hand) {
+        if (hand == null) {
+            throw new IllegalArgumentException("hand cannot be null");
+        }
+        this.hand = new ArrayList<>(hand);
+    }
+
     // deal hand :)
-    public void setHand(Deck deck) {
+    public void dealHand(Deck deck) {
         if (deck == null) {
             throw new IllegalArgumentException("Deck cannot be null");
         }
@@ -66,13 +73,16 @@ public class Player {
 
     // add new card to player's hand
     public void addCard(Card newCard, int selectedPos) {
-        try {
-            if (hand.size() < HAND_SIZE && newCard != null) {
-                hand.add(selectedPos, newCard);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (newCard == null) {
+            throw new IllegalArgumentException("Card cannot be null ");
         }
+        if (hand.size() >= HAND_SIZE) {
+            throw new IllegalStateException("Hand is already full ");
+        }
+        if (selectedPos < 0 || selectedPos > hand.size()) {
+            throw new IndexOutOfBoundsException("Selected position is out of bounds ");
+        }
+        hand.add(selectedPos, newCard);
     }
 
     // remove card from player's hand
@@ -87,10 +97,8 @@ public class Player {
 
     // show players hand with nice animation (kinda)
     public void showHand(){
-        StringBuilder handString = new StringBuilder();
         for (int i = 0; i < HAND_SIZE; i++) {
             System.out.println((i + 1) + ") " + hand.get(i));
-            handString.append(hand.get(i));
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

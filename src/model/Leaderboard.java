@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Leaderboard {
 
-    private static final int MAX_ENTRIES = 10;
+    private static final int MAX_ENTRIES = 5;
     private final List<Entry> entries;
     private static final String LEADERBOARD = "leaderboard.txt";
 
@@ -105,18 +105,22 @@ public class Leaderboard {
     public void display() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("Leaderboard:\n");
-        System.out.println("+---------+----------+");
-        System.out.println("| Name    | Score    |");
-        System.out.println("+---------+----------+");
+        System.out.println("+------------------+----------+");
+        System.out.println("| Name             | Score    |");
+        System.out.println("+------------------+----------+");
         if (entries.isEmpty()) {
-            System.out.printf("| %-15s |%n", " No Highscores xD ");
-            System.out.println("+---------+----------+");
+            System.out.printf("| %-27s |%n", "     No Highscores xD    ");
+            System.out.println("+------------------+----------+");
         } else {
             for (Entry entry : entries) {
-                System.out.printf("| %-7s | %-8d |%n", entry.name, entry.score);
-                System.out.println("+---------+----------+");
+                System.out.printf("| %-16s | %-8d |%n", entry.name.trim(), entry.score);
+                System.out.println("+------------------+----------+");
             }
         }
         System.out.print("\nPress enter to go back to main menu: ");
+    }
+
+    public List<Entry> getEntries() {
+        return entries;
     }
 }

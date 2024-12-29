@@ -18,7 +18,7 @@ public class Game {
     private final Replay replayQueue;
 
     private String endReason;
-    private int score, roundCount, selectedCardPos;
+    private int roundCount, selectedCardPos;
 
     public static final String TEST = "\u001B[31m";
     public static final String RESET = "\u001B[0m";
@@ -32,7 +32,7 @@ public class Game {
         this.roundCount = 0;
 
         // less important stuff
-        score = 0;
+
         this.replayQueue = new Replay();
 
         initialiseGame();
@@ -41,9 +41,9 @@ public class Game {
     private void initialiseGame() {
         replayQueue.clear();
         // cards in game after decks init
-        System.out.println("\n" + TEST + "TEST: " + getRemainingCards() + " cards" + RESET);
-        player.setHand(deck);
-        computerCard = deck.deal();
+        System.out.println("\n" + TEST + "TEST: " + deck.getRemainingCards() + " cards" + RESET);
+        player.dealHand(deck);
+        this.computerCard = deck.deal();
         if(computerCard == null) {
             throw new IllegalStateException("Deck is empty");
         }
@@ -89,7 +89,7 @@ public class Game {
         boolean validMove = cardSelection(playerCard, computerCard);
         replayQueue.addMessage("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-        System.out.println(TEST + "TEST: end of round #" + roundCount + " | cards left: " + getRemainingCards() + RESET);
+        System.out.println(TEST + "TEST: end of round #" + roundCount + " | cards left: " + deck.getRemainingCards() + RESET);
         return validMove;
     }
 
@@ -102,8 +102,8 @@ public class Game {
             List<Card> handSnapshot = new ArrayList<>(player.getHand());
 
             this.computerCard = deck.deal();
-            score++;
-            player.setScore(score);
+
+            player.setScore(player.getScore() + 1);
             player.removeCard(playerCard);
             player.addCard(deck.deal(), selectedCardPos);
             replayQueue.addMessage("Player made 15 and scored 1 point :)");
@@ -195,7 +195,6 @@ public class Game {
         }
 
         endReason = "No valid moves!";
-        replayQueue.addMessage("Player had no valid moves, Game ended.");
         return false;
     }
 
@@ -240,12 +239,16 @@ public class Game {
         return deck.getDeckCards();
     }
 
-    public int getRemainingCards() {
-        return getDeckCards().size();
+    public int getRemainingCards()  {
+        return deck.getRemainingCards();
     }
 
     public int getScore() {
-        return this.player.getScore();
+        return player.getScore();
+    }
+
+    public List<Card> getHand() {
+        return this.player.getHand();
     }
 
     public Replay getReplayQueue() {
