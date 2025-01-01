@@ -55,6 +55,6 @@ class GameTest {
 
         Replay replay = game.getReplayQueue();
         assertNotNull(replay, "Replay queue should not be null.");
-        assertTrue(replay.isEmpty(), "Replay queue should be empty initially");
+        assertFalse(replay.hasEvents(), "Replay queue should be empty initially");
     }
 }

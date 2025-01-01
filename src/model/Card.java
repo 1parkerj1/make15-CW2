@@ -5,8 +5,8 @@ package model;
  */
 public class Card {
 
-    private String[] ranks = {"Clubs", "Diamonds", "Hearts", "Spades"};
-    private String[] suits = {"2","3","4","5","6", "7","8","9","10", "Jack","Queen","King","Ace"};
+    private static final String[] RANKS = {"Clubs", "Diamonds", "Hearts", "Spades"};
+    private static final String[] SUITS = {"2","3","4","5","6", "7","8","9","10", "Jack","Queen","King","Ace"};
 
     private final String rank;
     private final String suit;

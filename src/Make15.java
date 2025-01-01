@@ -4,11 +4,22 @@ import utils.InputUtils;
 
 import java.util.Scanner;
 
+/**
+ * main class for make15
+ * providing the entry point for the application and managing flow
+ */
 public class Make15 {
 
     private static final Scanner scan = InputUtils.getSCANNER();
     private static final Leaderboard leaderboard = new Leaderboard();
 
+    /**
+     * main method for make 15
+     * handles the main game loop
+     * start game, view how to play, view leaderboard, quit game
+     *
+     * @param args cmd-line args (unused)
+     */
     public static void main(String[] args) {
         printBanner();
 
@@ -41,6 +52,12 @@ public class Make15 {
         }
     }
 
+    /**
+     * starts a new game of Make15
+     * prompting the player to select a number of decks and starts the game
+     * handling leaderboard updates if the player achieves a high score
+     * and prompts the player to view the game replay after the game ends
+     */
     private static void mainStartGame() {
         int deckNum = getDeckNum();
 
@@ -69,12 +86,36 @@ public class Make15 {
         System.out.print("Would you like to see the replay? (y/n) ");
         String choice = InputUtils.getYorN();
         if (choice.equalsIgnoreCase("Y")) {
-            game.getReplayQueue().viewReplay();
+           displayReplay(game);
         }
         game.getReplayQueue().clear();
-
     }
 
+    /**
+     * displays the replay of the game
+     *
+     * @param game object whose replay is displayed
+     */
+    private static void displayReplay(Game game) {
+        System.out.println("\nWatching replay: ");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        while (game.getReplayQueue().hasEvents()) {
+            System.out.println(game.getReplayQueue().getNextEvent());
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("\nReplay Finished :) Thanks for playing");
+    }
+
+    /**
+     * retrieves the number for the amount of decks the player wants to use
+     * 1-3 decks allowed to be selected (just an extra feature I thought was needed)
+     *
+     * @return the number of decks chose by the player
+     */
     private static int getDeckNum() {
         System.out.print("\nSelect the number of decks you'd like to play with (1-3): ");
         while (true) {
@@ -94,6 +135,11 @@ public class Make15 {
         }
     }
 
+    /**
+     * prompts the player to enter their name and validates the input
+     *
+     * @return the validated player name :)
+     */
     private static String validatePlayerName() {
         while (true) {
             System.out.print("\nEnter your name: ");
@@ -111,6 +157,10 @@ public class Make15 {
 
 
     // display format methods :)
+
+    /**
+     * prints game banner
+     */
     public static void printBanner() {
         System.out.println("                                                             __            .----------. ");
         System.out.println("                                                        ...-'  |`.        /          /  ");
@@ -126,6 +176,10 @@ public class Make15 {
         System.out.println("                \\ \\._,\\ '/'    \\  \\  \\                                                   ");
         System.out.println("                 `--'  `\"'------'  '---'                                                 \n");
     }
+
+    /**
+     * prints main menu options
+     */
     public static void printMainMenu() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("1. Start Game");
@@ -134,6 +188,10 @@ public class Make15 {
         System.out.println("4. Quit Game");
         System.out.print("-> ");
     }
+
+    /**
+     * prints the rules of the game
+     */
     public static void printRules() {
         System.out.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         System.out.println("How to Play:");

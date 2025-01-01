@@ -3,9 +3,6 @@ package tests;
 import model.Replay;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReplayTest {
@@ -16,42 +13,9 @@ class ReplayTest {
         replay.addMessage("TEST: you made 15 :)");
         replay.addMessage("TEST: +1 point");
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
-
-        replay.viewReplay();
-
-        System.setOut(originalOut);
-        String output = outputStream.toString();
-
-        assertTrue(output.contains("\nWatching replay: "));
-        assertTrue(output.contains("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-        assertTrue(output.contains("TEST: you made 15 :)"));
-        assertTrue(output.contains("TEST: +1 point"));
-        assertTrue(output.contains("\nReplay Finished :) Thanks for playing"));
-    }
-
-    @Test
-    void viewReplay() {
-        Replay replay = new Replay();
-        replay.addMessage("TEST: you made 15 :)");
-        replay.addMessage("TEST: +1 point");
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
-
-        replay.viewReplay();
-
-        System.setOut(originalOut);
-
-        String output = outputStream.toString();
-        assertTrue(output.contains("\nWatching replay: "));
-        assertTrue(output.contains("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-        assertTrue(output.contains("TEST: you made 15 :)"));
-        assertTrue(output.contains("TEST: +1 point"));
-        assertTrue(output.contains("\nReplay Finished :) Thanks for playing"));
+        assertEquals("TEST: you made 15 :)", replay.getNextEvent());
+        assertEquals("TEST: +1 point", replay.getNextEvent());
+        assertFalse(replay.hasEvents());
     }
 
     @Test
@@ -62,21 +26,34 @@ class ReplayTest {
 
         replay.clear();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
+        assertFalse(replay.hasEvents());
+    }
 
+    @Test
+    void hasEvents() {
+        Replay replay = new Replay();
 
-        replay.viewReplay();
+        assertFalse(replay.hasEvents());
 
-        System.setOut(originalOut);
+        replay.addMessage("TEST: you made 15 :)");
+        assertTrue(replay.hasEvents());
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("\nWatching replay: "));
-        assertTrue(output.contains("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-        assertFalse(output.contains("TEST: you made 15 :)"));
-        assertFalse(output.contains("TEST: +1 point"));
-        assertTrue(replay.isEmpty());
-        assertTrue(output.contains("\nReplay Finished :) Thanks for playing"));
+        replay.getNextEvent();
+        assertFalse(replay.hasEvents());
+    }
+
+    @Test
+    void getNextEvent() {
+        Replay replay = new Replay();
+        replay.addMessage("TEST: you made 15 :)");
+        replay.addMessage("TEST: +1 point");
+
+        // Assert correct retrieval of events
+        assertEquals("TEST: you made 15 :)", replay.getNextEvent());
+        assertEquals("TEST: +1 point", replay.getNextEvent());
+
+        // Assert that the log is now empty
+        assertNull(replay.getNextEvent());
+        assertFalse(replay.hasEvents());
     }
 }

@@ -27,23 +27,6 @@ public class Replay{
         this.gameEvents.add(message);
     }
 
-    /**
-     * display the replay of all the recorded game events
-     * each event is printed with a brief delay to simulate a replay
-     */
-    public void viewReplay() {
-        System.out.println("\nWatching replay: ");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        while (!gameEvents.isEmpty()) {
-            System.out.println(gameEvents.poll());
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println("\nReplay Finished :) Thanks for playing");
-    }
 
     /**
      * clears all the game events from the queue
@@ -53,11 +36,20 @@ public class Replay{
     }
 
     /**
-     * checks if the replay queue is empty
+     * retrieve the next event in the replay log
      *
-     * @return true if there are no game events in the queue false otherwise
+     * @return the next event, or null if no events remain
      */
-    public boolean isEmpty() {
-        return this.gameEvents.isEmpty();
+    public String getNextEvent() {
+        return gameEvents.poll();
+    }
+
+    /**
+     * check if there are any events remaining in the log :)
+     *
+     * @return true if there are events, false otherwise
+     */
+    public boolean hasEvents() {
+        return !gameEvents.isEmpty();
     }
 }
