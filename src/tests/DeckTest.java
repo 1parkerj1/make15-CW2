@@ -55,13 +55,19 @@ class DeckTest {
     }
 
     @Test
-    void isEmpty() {
-        assertFalse(deck.isEmpty(), "newly created deck should not be empty");
+    void testDeckNotEmptyInitially() {
+        Deck deck = new Deck(1);
+        assertFalse(deck.isEmpty(), "A newly created deck with cards should not be empty");
+    }
+
+    @Test
+    void testDeckEmptyAfterDealingAllCards() {
+        Deck deck = new Deck(1);
 
         while (!deck.isEmpty()) {
             deck.deal();
         }
-        assertTrue(deck.isEmpty(), "deck should be empty after dealing all cards");
+        assertTrue(deck.isEmpty(), "The deck should be empty after dealing all cards");
     }
 
     @Test
