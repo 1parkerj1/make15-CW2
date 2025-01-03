@@ -1,5 +1,0 @@
-parker1,2
-parker,1
-parker,1
-parker,1
-parker,1

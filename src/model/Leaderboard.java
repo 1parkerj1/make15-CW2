@@ -38,6 +38,16 @@ public class Leaderboard {
         public String getName() {
             return name;
         }
+
+        /**
+         * return the entry player name and score
+         *
+         * @return entry player name and score
+         */
+        @Override
+        public String toString() {
+            return name + ": " + score;
+        }
     }
 
     /**
@@ -184,4 +194,6 @@ public class Leaderboard {
     public List<Entry> getEntries() {
         return entries;
     }
+
+
 }

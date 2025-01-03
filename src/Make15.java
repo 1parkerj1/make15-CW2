@@ -128,7 +128,7 @@ public class Make15 {
                 if (deckNum >= 1 && deckNum <= 3) {
                     return deckNum;
                 }
-                System.out.println("Invalid input, please enter a number between 1-3! ");
+                System.out.print("\nInvalid input, please enter a number between 1-3! ");
             } catch (NumberFormatException e) {
                 System.out.print("\nInvalid input, Please enter a valid number: ");
             }
