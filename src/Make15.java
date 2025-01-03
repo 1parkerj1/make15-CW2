@@ -206,6 +206,7 @@ public class Make15 {
         System.out.println("5. If you succeed in making 15:");
         System.out.println("   - You score 1 point");
         System.out.println("   - Your card is replaced with a new one from the deck");
+        System.out.println("   - Prompt to exchange picture cards from your hand will be (CSV format)");
         System.out.println("6. If you cannot make 15 but have a card of the same suit as the computer's card:");
         System.out.println("   - You can play it to continue the game, but no points are scored");
         System.out.println("   - This card will be replaced with a new one from the deck");
